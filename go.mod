@@ -3,7 +3,7 @@ module github.com/Akegarasu/blive-queue
 go 1.18
 
 require (
-	github.com/Akegarasu/blivedm-go v0.0.0-20220504023101-177c8d35b1b9
+	github.com/Akegarasu/blivedm-go v0.0.0-20220507063942-978a4e85d31b
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.7.7
 	github.com/gorilla/websocket v1.5.0
