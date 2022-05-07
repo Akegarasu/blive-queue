@@ -49,6 +49,12 @@ func (r Rule) Filter(danmaku *message.Danmaku, roomID string) bool {
 	if danmaku.Content != r.keyword {
 		return false
 	}
+	iu := strconv.Itoa(danmaku.Sender.Uid)
+	for _, i := range r.blockUsers {
+		if iu == i {
+			return false
+		}
+	}
 	// 无 0 总督 1 提督 2 舰长 3
 	if r.guardOnly && danmaku.Sender.GuardLevel == 0 {
 		return false
