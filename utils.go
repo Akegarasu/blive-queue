@@ -69,6 +69,7 @@ func HTTPGetReadCloser(url string, headers map[string]string) (io.ReadCloser, er
 }
 
 func checkUpdate() {
+	log.Info("正在检查更新")
 	updateURL := "https://api.github.com/repos/Akegarasu/blive-queue/releases/latest"
 	j, err := GetJson(updateURL, nil)
 	if err != nil {
