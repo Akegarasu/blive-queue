@@ -12,6 +12,7 @@ type Rule struct {
 	keyword        string
 	cancelKeyword  string
 	guardOnly      bool
+	fuzzyMatch     bool
 	minMedalLevel  int
 	maxQueueLength int
 	admins         []string
@@ -26,6 +27,7 @@ func NewRule(s string) *Rule {
 		keyword:        "排队",
 		cancelKeyword:  "取消排队",
 		guardOnly:      g.Get("guardOnly").Bool(),
+		fuzzyMatch:     g.Get("fuzzyMatch").Bool(),
 		maxQueueLength: int(g.Get("maxQueueLength").Int()),
 		minMedalLevel:  int(g.Get("minMedalLevel").Int()),
 		admins:         admins,
@@ -38,6 +40,7 @@ func DefaultRule() *Rule {
 		keyword:        "排队",
 		cancelKeyword:  "取消排队",
 		guardOnly:      false,
+		fuzzyMatch:     false,
 		maxQueueLength: 20,
 		minMedalLevel:  0,
 		admins:         nil,
@@ -46,8 +49,14 @@ func DefaultRule() *Rule {
 }
 
 func (r Rule) Filter(danmaku *message.Danmaku, roomID string) bool {
-	if danmaku.Content != r.keyword {
-		return false
+	if r.fuzzyMatch {
+		if !strings.Contains(danmaku.Content, r.keyword) {
+			return false
+		}
+	} else {
+		if danmaku.Content != r.keyword {
+			return false
+		}
 	}
 	iu := strconv.Itoa(danmaku.Sender.Uid)
 	for _, i := range r.blockUsers {

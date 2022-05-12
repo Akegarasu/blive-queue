@@ -36,6 +36,11 @@
                   <el-switch v-model="form.guardOnly"></el-switch>
                 </el-form-item>
               </el-col>
+              <el-col :xs="24" :sm="8">
+                <el-form-item label="排队关键词模糊匹配">
+                  <el-switch v-model="form.fuzzyMatch"></el-switch>
+                </el-form-item>
+              </el-col>
             </el-row>
             <el-row :gutter="20">
               <el-col :xs="24" :sm="8">

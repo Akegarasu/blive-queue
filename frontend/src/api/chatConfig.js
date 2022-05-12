@@ -5,7 +5,8 @@ export const DEFAULT_CONFIG = {
   minMedalLevel: 0,
   maxQueueLength: 20,
   admins: '',
-  blockUsers: ''
+  blockUsers: '',
+  fuzzyMatch: false,
 }
 
 export function setLocalConfig (config) {
