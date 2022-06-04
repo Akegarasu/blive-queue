@@ -183,10 +183,18 @@ export default {
       chatConfig.setLocalConfig(this.form)
       client.emit('APPLY_RULE', this.form)
       client.emit('CONNECT_DANMAKU', this.form.roomId.toString())
+      this.$message({
+        message: '连接到房间',
+        duration: '1000'
+      })
     },
     saveConfig() {
       chatConfig.setLocalConfig(this.form)
       client.emit('APPLY_RULE', this.form)
+      this.$message({
+        message: '保存设置成功',
+        duration: '1000'
+      })
     },
     enterRoom() {
       window.open(
