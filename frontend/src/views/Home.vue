@@ -172,6 +172,15 @@ export default {
     }, 500),
   },
   created() {
+    if (window.localStorage.version !== chatConfig.VERSION) {
+      this.$messagebox.alert('检测到您更新了排队姬~ 请记得在 obs 内选中弹幕姬的浏览器源，点击 “刷新” 来更新 obs 内的缓存！', '更新提示', {
+        confirmButtonText: '确定',
+        callback: () => {
+          window.localStorage.version = chatConfig.VERSION
+        }
+      });
+    }
+
     if (this.form.roomId !== 1) {
       setTimeout(() => {
         this.connectRoom()

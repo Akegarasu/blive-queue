@@ -9,7 +9,7 @@
         </router-link>
       </div>
       <div class="version">
-        v0.1.1
+        {{version}}
       </div>
       <sidebar></sidebar>
     </el-aside>
@@ -24,6 +24,7 @@
 
 <script>
 import Sidebar from './Sidebar.vue'
+import * as chatConfig from '@/api/chatConfig'
 
 export default {
   name: 'Layout',
@@ -33,7 +34,8 @@ export default {
   data() {
     return {
       isMobile: false,
-      hideSidebar: true
+      hideSidebar: true,
+      version: chatConfig.VERSION
     }
   },
   mounted() {
