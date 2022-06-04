@@ -49,15 +49,6 @@ func DefaultRule() *Rule {
 }
 
 func (r Rule) Filter(danmaku *message.Danmaku, roomID string) bool {
-	if r.fuzzyMatch {
-		if !strings.Contains(danmaku.Content, r.keyword) {
-			return false
-		}
-	} else {
-		if danmaku.Content != r.keyword {
-			return false
-		}
-	}
 	iu := strconv.Itoa(danmaku.Sender.Uid)
 	for _, i := range r.blockUsers {
 		if iu == i {

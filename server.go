@@ -6,6 +6,7 @@ import (
 	"github.com/Akegarasu/blivedm-go/message"
 	"github.com/tidwall/gjson"
 	"strconv"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -16,6 +17,7 @@ type Server struct {
 	Queue         *Queue
 	Rule          *Rule
 	RoomID        string
+	Pause         bool
 }
 
 func NewServer() *Server {
@@ -24,6 +26,7 @@ func NewServer() *Server {
 		DanmakuClient: nil,
 		Queue:         NewQueue(),
 		Rule:          DefaultRule(),
+		Pause:         false,
 	}
 }
 
@@ -74,6 +77,16 @@ func (s *Server) Init() {
 		_ = s.Eio.BoardCastEventExceptSelf(*event)
 		log.Infof("排序: %d -> %d", oldIndex, newIndex)
 	})
+
+	s.Eio.RegisterEventHandler("PAUSE", func(event *eio.Event) {
+		s.Pause = true
+		log.Info("已暂停排队")
+	})
+
+	s.Eio.RegisterEventHandler("CONTINUE", func(event *eio.Event) {
+		s.Pause = false
+		log.Info("已继续排队")
+	})
 }
 
 func (s *Server) ConnectDanmakuServer(roomID string) {
@@ -93,7 +106,10 @@ func (s *Server) ConnectDanmakuServer(roomID string) {
 }
 
 func (s *Server) HandleDanmaku(d *message.Danmaku) {
-	if d.Content == s.Rule.keyword {
+	if s.Pause {
+		return
+	}
+	if (s.Rule.fuzzyMatch && strings.Contains(d.Content, s.Rule.keyword)) || d.Content == s.Rule.keyword {
 		s.HandleJoinQueue(d)
 		return
 	}
