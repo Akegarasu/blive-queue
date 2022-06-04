@@ -73,28 +73,32 @@ export default {
       client.emit('REMOVE_ALL')
       this.$message({
         message: '清除全部排队',
-        duration: '1000'
+        duration: '1000',
+        type: 'success'
       })
     },
     syncData() {
       client.syncData()
       this.$message({
         message: '同步中~',
-        duration: '1000'
+        duration: '1000',
+        type: 'success'
       })
     },
     pauseQueue() {
       client.emit('PAUSE')
       this.$message({
         message: '已暂停',
-        duration: '1000'
+        duration: '1000',
+        type: 'warning'
       })
     },
     continueQueue() {
       client.emit('CONTINUE')
       this.$message({
         message: '已继续排队~',
-        duration: '1000'
+        duration: '1000',
+        type: 'success'
       })
     }
   },
