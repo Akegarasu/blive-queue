@@ -12,7 +12,7 @@ import (
 var (
 	development bool
 	webPort     = "8080"
-	version     = "v0.0.2"
+	version     = "v0.1.1"
 )
 
 func init() {
