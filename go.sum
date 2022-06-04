@@ -2,6 +2,8 @@ github.com/Akegarasu/blivedm-go v0.0.0-20220504023101-177c8d35b1b9 h1:xup9vMKwrT
 github.com/Akegarasu/blivedm-go v0.0.0-20220504023101-177c8d35b1b9/go.mod h1:D1UGZ5ZBQ9BbZsEh8bfSJSTaBC9x5p4EeZ17Q0wTxrY=
 github.com/Akegarasu/blivedm-go v0.0.0-20220507063942-978a4e85d31b h1:ndxyZ8gmT9Li3ANHm7HN5T+h4z1av42LC2leEKUQqbM=
 github.com/Akegarasu/blivedm-go v0.0.0-20220507063942-978a4e85d31b/go.mod h1:D1UGZ5ZBQ9BbZsEh8bfSJSTaBC9x5p4EeZ17Q0wTxrY=
+github.com/Akegarasu/blivedm-go v0.0.0-20220604012330-08a21354d74f h1:CzziVq9swuRkCYwJu+9UkaryA/ugpCNX2mdIrzxdvFg=
+github.com/Akegarasu/blivedm-go v0.0.0-20220604012330-08a21354d74f/go.mod h1:jgljFT4+aXeNDc/fHo7HbkE/SeQZQC5vi5ITWuhmXrM=
 github.com/andybalholm/brotli v1.0.4 h1:V7DdXeJtZscaqfNuAdSRuRFzuiKlHSC/Zh3zl9qY3JY=
 github.com/andybalholm/brotli v1.0.4/go.mod h1:fO7iG3H7G2nSZ7m0zPUDn85XEX2GTukHGRSepvi9Eig=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
