@@ -109,13 +109,18 @@ func (s *Server) HandleDanmaku(d *message.Danmaku) {
 	if s.Pause {
 		return
 	}
-	if (s.Rule.fuzzyMatch && strings.Contains(d.Content, s.Rule.keyword)) || d.Content == s.Rule.keyword {
-		s.HandleJoinQueue(d)
-		return
-	}
-	if d.Content == s.Rule.cancelKeyword {
-		s.HandleLeaveQueue(d)
-		return
+	if s.Rule.fuzzyMatch {
+		if strings.Contains(d.Content, s.Rule.cancelKeyword) {
+			s.HandleLeaveQueue(d)
+		} else if strings.Contains(d.Content, s.Rule.keyword) {
+			s.HandleLeaveQueue(d)
+		}
+	} else {
+		if d.Content == s.Rule.cancelKeyword {
+			s.HandleLeaveQueue(d)
+		} else if d.Content == s.Rule.keyword {
+			s.HandleJoinQueue(d)
+		}
 	}
 }
 
@@ -135,8 +140,10 @@ func (s *Server) HandleJoinQueue(d *message.Danmaku) {
 			Data:      d.Raw,
 		})
 		if err != nil {
-			log.Error("排队失败")
+			log.Error("同步排队事件失败: 请尝试在控制台手动点击 “同步” 按钮")
 		}
+	} else {
+		log.Errorf("排队失败: %s (uid: %d) 已经在队列里面了", d.Sender.Uname, d.Sender.Uid)
 	}
 }
 
