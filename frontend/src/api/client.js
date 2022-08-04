@@ -27,7 +27,7 @@ class Client {
   }
 
   syncData () {
-    axios.get('http://localhost:18303/api/sync').then(
+    axios.get('/api/sync').then(
       (ret) => {
         if (ret.status === 200 && ret.data.cmd === 'SYNC') {
           console.log(ret.data.data)
@@ -43,7 +43,7 @@ class Client {
       return
     }
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
-    const host = 'localhost:18303'
+    const host = window.location.host
     const url = `${protocol}://${host}/eio`
     this.websocket = new WebSocket(url)
     this.websocket.onopen = this.onWsOpen.bind(this)
