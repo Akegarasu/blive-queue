@@ -12,13 +12,14 @@ import (
 )
 
 var (
-	development bool
-	webPort     = 8080
-	version     = "v0.3.1"
+	dev     bool
+	input   string
+	webPort = 8080
+	version = "v0.3.1"
 )
 
 func init() {
-	flag.BoolVar(&development, "dev", false, "开发模式")
+	flag.BoolVar(&dev, "dev", false, "开发模式")
 	log.SetFormatter(&easy.Formatter{
 		TimestampFormat: "2006-01-02 15:04:05",
 		LogFormat:       "[排队姬][%time%][%lvl%]: %msg% \n",
@@ -32,13 +33,13 @@ func main() {
 	s := NewServer()
 	s.Init()
 	defer s.DanmakuClient.Stop()
-	if !development {
+	if !dev {
 		gin.SetMode(gin.ReleaseMode)
 		webPort = 18303
 		go checkUpdate()
 	}
 	router := gin.New()
-	if development {
+	if dev {
 		router.Use(CorsMiddleWare("http://localhost:8080"))
 	}
 	router.GET("/eio", s.Eio.Warp)
@@ -67,4 +68,6 @@ func main() {
 	if err = router.Run(fmt.Sprintf(":%d", webPort)); err != nil {
 		log.Error("启动失败: ", err)
 	}
+	log.Infof("按回车键退出...")
+	_, _ = fmt.Scanln(&input)
 }
