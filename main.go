@@ -2,17 +2,19 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	easy "github.com/t-tomalak/logrus-easy-formatter"
 	"os/exec"
+	"time"
 )
 
 var (
 	development bool
-	webPort     = "8080"
-	version     = "v0.1.1"
+	webPort     = 8080
+	version     = "v0.3.1"
 )
 
 func init() {
@@ -28,11 +30,11 @@ func main() {
 	var err error
 	flag.Parse()
 	s := NewServer()
-	defer s.DanmakuClient.Stop()
 	s.Init()
+	defer s.DanmakuClient.Stop()
 	if !development {
 		gin.SetMode(gin.ReleaseMode)
-		webPort = "18303"
+		webPort = 18303
 		go checkUpdate()
 	}
 	router := gin.New()
@@ -48,12 +50,21 @@ func main() {
 	router.NoRoute(func(c *gin.Context) {
 		c.File("./frontend/dist/index.html")
 	})
-
-	err = exec.Command("cmd", "/C", "start", "http://localhost:"+webPort).Run()
-	if err != nil {
-		log.Error("打开浏览器失败了, 请手动打开网址使用排队姬 ", "http://localhost:"+webPort)
+	for {
+		if checkPort(webPort) {
+			break
+		} else {
+			log.Errorf("启动失败: 端口 %d 被占用, 将尝试更换端口启动", webPort)
+			webPort += 1
+			time.Sleep(500 * time.Millisecond)
+		}
 	}
-	if err = router.Run(":18303"); err != nil {
-		log.Fatal("启动失败: 请检查是否已经启动了~")
+	url := fmt.Sprintf("%s%d", "http://localhost:", webPort)
+	err = exec.Command("cmd", "/C", "start", url).Run()
+	if err != nil {
+		log.Error("打开浏览器失败了, 请手动打开网址使用排队姬 ", url)
+	}
+	if err = router.Run(fmt.Sprintf(":%d", webPort)); err != nil {
+		log.Error("启动失败: ", err)
 	}
 }

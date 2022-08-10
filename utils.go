@@ -1,11 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"github.com/tidwall/gjson"
 	"io"
 	"io/ioutil"
+	"net"
 	"net/http"
 )
 
@@ -66,6 +68,18 @@ func HTTPGetReadCloser(url string, headers map[string]string) (io.ReadCloser, er
 		return nil, err
 	}
 	return resp.Body, err
+}
+
+func checkPort(port int) bool {
+	s, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
+	if err != nil {
+		return false
+	}
+	err = s.Close()
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 func checkUpdate() {
