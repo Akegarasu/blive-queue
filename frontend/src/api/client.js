@@ -45,6 +45,7 @@ class Client {
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
     const host = window.location.host
     const url = `${protocol}://${host}/eio`
+    console.log(url)
     this.websocket = new WebSocket(url)
     this.websocket.onopen = this.onWsOpen.bind(this)
     this.websocket.onclose = this.onWsClose.bind(this)

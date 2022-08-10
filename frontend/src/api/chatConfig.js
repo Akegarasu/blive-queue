@@ -1,6 +1,6 @@
 import {mergeConfig} from '@/utils'
 
-export const VERSION = "0.1.1"
+export const VERSION = "0.3.1"
 
 export const DEFAULT_CONFIG = {
   guardOnly: false,
