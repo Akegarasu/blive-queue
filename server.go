@@ -113,7 +113,7 @@ func (s *Server) HandleDanmaku(d *message.Danmaku) {
 		if strings.Contains(d.Content, s.Rule.cancelKeyword) {
 			s.HandleLeaveQueue(d)
 		} else if strings.Contains(d.Content, s.Rule.keyword) {
-			s.HandleLeaveQueue(d)
+			s.HandleJoinQueue(d)
 		}
 	} else {
 		if d.Content == s.Rule.cancelKeyword {
