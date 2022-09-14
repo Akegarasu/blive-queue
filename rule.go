@@ -73,3 +73,12 @@ func (r Rule) Filter(danmaku *message.Danmaku, roomID string) bool {
 	}
 	return true
 }
+
+// CheckIsAdmin 检查是否为管理员
+func (r Rule) CheckIsAdmin(u *message.User) bool {
+	uid := strconv.Itoa(u.Uid)
+	if InSlice(r.admins, uid) {
+		return true
+	}
+	return false
+}

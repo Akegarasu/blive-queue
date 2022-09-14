@@ -98,3 +98,12 @@ func checkUpdate() {
 		log.Info("---------------------------------------------")
 	}
 }
+
+func InSlice[T string | int](slice []T, elem T) bool {
+	for _, v := range slice {
+		if v == elem {
+			return true
+		}
+	}
+	return false
+}
