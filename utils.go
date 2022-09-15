@@ -111,3 +111,7 @@ func InSlice[T string | int](slice []T, elem T) bool {
 	}
 	return false
 }
+
+func i2s(i int) string {
+	return strconv.Itoa(i)
+}

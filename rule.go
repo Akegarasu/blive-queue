@@ -48,15 +48,15 @@ func DefaultRule() *Rule {
 	}
 }
 
-func (r Rule) Filter(danmaku *message.Danmaku, roomID string) bool {
-	iu := strconv.Itoa(danmaku.Sender.Uid)
+func (r Rule) Filter(user *message.User, roomID string) bool {
+	iu := strconv.Itoa(user.Uid)
 	for _, i := range r.blockUsers {
 		if iu == i {
 			return false
 		}
 	}
 	// 无 0 总督 1 提督 2 舰长 3
-	if r.guardOnly && danmaku.Sender.GuardLevel == 0 {
+	if r.guardOnly && user.GuardLevel == 0 {
 		return false
 	}
 	if r.minMedalLevel != 0 {
@@ -64,10 +64,10 @@ func (r Rule) Filter(danmaku *message.Danmaku, roomID string) bool {
 		if err != nil {
 			log.Error("房间号转换失败")
 		}
-		if danmaku.Sender.Medal.UpRoomId != rid {
+		if user.Medal.UpRoomId != rid {
 			return false
 		}
-		if danmaku.Sender.Medal.Level < r.minMedalLevel {
+		if user.Medal.Level < r.minMedalLevel {
 			return false
 		}
 	}

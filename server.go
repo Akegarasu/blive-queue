@@ -105,57 +105,58 @@ func (s *Server) ConnectDanmakuServer(roomID string) {
 	log.Info("连接到房间: ", roomID)
 }
 
+// HandleDanmaku 处理弹幕，弹幕的原始数据应只停留在这个函数。往下传的参数全部应该为 message.User
 func (s *Server) HandleDanmaku(d *message.Danmaku) {
 	if s.Pause {
 		return
 	}
 	if s.Rule.fuzzyMatch {
 		if strings.Contains(d.Content, s.Rule.cancelKeyword) {
-			s.HandleLeaveQueue(d)
+			s.HandleLeaveQueue(d.Sender)
 		} else if strings.Contains(d.Content, s.Rule.keyword) {
-			s.HandleJoinQueue(d)
+			s.HandleJoinQueue(d.Sender)
 		}
 	} else {
 		if d.Content == s.Rule.cancelKeyword {
-			s.HandleLeaveQueue(d)
+			s.HandleLeaveQueue(d.Sender)
 		} else if d.Content == s.Rule.keyword {
-			s.HandleJoinQueue(d)
+			s.HandleJoinQueue(d.Sender)
 		}
 	}
 }
 
-func (s *Server) HandleJoinQueue(d *message.Danmaku) {
-	if !s.Rule.Filter(d, s.RoomID) {
+func (s *Server) HandleJoinQueue(user *message.User) {
+	if !s.Rule.Filter(user, s.RoomID) {
 		return
 	}
 	if s.Queue.Que.Len() >= s.Rule.maxQueueLength {
 		log.Error("排队失败: 队列满了")
 		return
 	}
-	ok := s.Queue.Add(d.Sender)
+	ok := s.Queue.Add(user)
 	if ok {
-		log.Infof("添加排队成功: %s (uid: %d)", d.Sender.Uname, d.Sender.Uid)
+		log.Infof("添加排队成功: %s (uid: %d)", user.Uname, user.Uid)
 		err := s.Eio.BoardCastEvent(eio.Event{
 			EventName: "ADD_USER",
-			Data:      d.Raw,
+			Data:      NewLiveUser(user).Json(),
 		})
 		if err != nil {
 			log.Error("同步排队事件失败: 请尝试在控制台手动点击 “同步” 按钮")
 		}
 	} else {
-		log.Errorf("排队失败: %s (uid: %d) 已经在队列里面了", d.Sender.Uname, d.Sender.Uid)
+		log.Errorf("排队失败: %s (uid: %d) 已经在队列里面了", user.Uname, user.Uid)
 	}
 }
 
-func (s *Server) HandleLeaveQueue(d *message.Danmaku) {
-	if s.Queue.In(d.Sender) {
-		s.Queue.Remove(d.Sender.Uid)
+func (s *Server) HandleLeaveQueue(user *message.User) {
+	if s.Queue.In(user) {
+		s.Queue.Remove(user.Uid)
 		_ = s.Eio.BoardCastEvent(eio.Event{
 			EventName: "REMOVE_USER",
-			Data:      strconv.Itoa(d.Sender.Uid),
+			Data:      strconv.Itoa(user.Uid),
 		})
-		log.Infof("取消排队成功: %s (uid: %d)", d.Sender.Uname, d.Sender.Uid)
+		log.Infof("取消排队成功: %s (uid: %d)", user.Uname, user.Uid)
 	} else {
-		log.Errorf("取消排队失败: %s (uid: %d) 根本没有排队哦", d.Sender.Uname, d.Sender.Uid)
+		log.Errorf("取消排队失败: %s (uid: %d) 根本没有排队哦", user.Uname, user.Uid)
 	}
 }
