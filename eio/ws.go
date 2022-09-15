@@ -12,6 +12,7 @@ import (
 )
 
 type Server struct {
+	// TODO: 要加锁
 	conn          []*Connection
 	eventHandlers map[string]func(*Event)
 }
