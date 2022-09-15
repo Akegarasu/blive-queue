@@ -2,7 +2,7 @@ package main
 
 import (
 	"container/list"
-	"strconv"
+	"encoding/json"
 	"sync"
 
 	"github.com/Akegarasu/blivedm-go/message"
@@ -11,19 +11,36 @@ import (
 // Queue 基于 container/list 的封装
 type Queue struct {
 	Que *list.List
+	// Map仅作用来判断的根据，如果需要这里可以换成 struct{} 减少空间占用
 	Map map[int]int
 	mu  sync.RWMutex
 }
 
 type SyncMessage struct {
 	Cmd  string     `json:"cmd"`
-	Data []SyncData `json:"data"`
+	Data []LiveUser `json:"data"`
 }
 
-type SyncData struct {
-	Uid      string `json:"uid"`
-	Nickname string `json:"nickname"`
-	Level    string `json:"level"`
+type LiveUser struct {
+	Uid        string `json:"uid"`
+	Nickname   string `json:"nickname"`
+	GuardLevel string `json:"level"`
+}
+
+func NewLiveUser(u *message.User) LiveUser {
+	return LiveUser{
+		Uid:        i2s(u.Uid),
+		Nickname:   u.Uname,
+		GuardLevel: i2s(u.GuardLevel),
+	}
+}
+
+func (b LiveUser) Json() string {
+	marshal, err := json.Marshal(b)
+	if err != nil {
+		return ""
+	}
+	return string(marshal)
 }
 
 func NewQueue() *Queue {
@@ -106,19 +123,14 @@ func (q *Queue) In(u *message.User) bool {
 }
 
 func (q *Queue) Encode() *SyncMessage {
-	s := &SyncMessage{
-		Cmd:  "SYNC",
-		Data: nil,
-	}
-	d := make([]SyncData, 0)
+	d := make([]LiveUser, 0)
 	for p := q.Que.Front(); p != nil; p = p.Next() {
 		user := p.Value.(*message.User)
-		d = append(d, SyncData{
-			Uid:      strconv.Itoa(user.Uid),
-			Nickname: user.Uname,
-			Level:    strconv.Itoa(user.GuardLevel),
-		})
+		d = append(d, NewLiveUser(user))
 	}
-	s.Data = d
+	s := &SyncMessage{
+		Cmd:  "SYNC",
+		Data: d,
+	}
 	return s
 }
