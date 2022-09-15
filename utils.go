@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
+	"strconv"
 )
 
 var (
@@ -100,6 +101,9 @@ func checkUpdate() {
 }
 
 func InSlice[T string | int](slice []T, elem T) bool {
+	if slice == nil {
+		return false
+	}
 	for _, v := range slice {
 		if v == elem {
 			return true
