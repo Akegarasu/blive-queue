@@ -5,7 +5,7 @@ const HEARTBEAT_INTERVAL = 10 * 1000
 const RECEIVE_TIMEOUT = HEARTBEAT_INTERVAL + 5 * 1000
 
 class Client {
-  constructor () {
+  constructor() {
     this.websocket = null
     this.connected = false
     this.waitSending = []
@@ -15,18 +15,18 @@ class Client {
     this.receiveTimeoutTimerId = null
   }
 
-  start () {
+  start() {
     this.wsConnect()
   }
 
-  stop () {
+  stop() {
     this.isDestroying = true
     if (this.websocket) {
       this.websocket.close()
     }
   }
 
-  syncData () {
+  syncData() {
     axios.get('/api/sync').then(
       (ret) => {
         if (ret.status === 200 && ret.data.cmd === 'SYNC') {
@@ -38,7 +38,7 @@ class Client {
     )
   }
 
-  wsConnect () {
+  wsConnect() {
     if (this.isDestroying) {
       return
     }
@@ -52,21 +52,21 @@ class Client {
     this.websocket.onmessage = this.onWsMessage.bind(this)
   }
 
-  onWsOpen () {
+  onWsOpen() {
     this.connected = true
     this.retryCount = 0
     this.heartbeatTimerId = window.setInterval(this.sendHeartbeat.bind(this), HEARTBEAT_INTERVAL)
     this.refreshReceiveTimeoutTimer()
   }
 
-  emit (cmd, data) {
+  emit(cmd, data) {
     this.send({
       'cmd': cmd,
       'data': data
     })
   }
 
-  send (packet) {
+  send(packet) {
     if (!this.connected) {
       this.waitSending.push(packet)
     } else {
@@ -80,18 +80,18 @@ class Client {
     }
   }
 
-  sendHeartbeat () {
+  sendHeartbeat() {
     this.emit('HEARTBEAT')
   }
 
-  refreshReceiveTimeoutTimer () {
+  refreshReceiveTimeoutTimer() {
     if (this.receiveTimeoutTimerId) {
       window.clearTimeout(this.receiveTimeoutTimerId)
     }
     this.receiveTimeoutTimerId = window.setTimeout(this.onReceiveTimeout.bind(this), RECEIVE_TIMEOUT)
   }
 
-  onReceiveTimeout () {
+  onReceiveTimeout() {
     window.console.warn('接收消息超时')
     this.receiveTimeoutTimerId = null
 
@@ -101,7 +101,7 @@ class Client {
     this.onWsClose()
   }
 
-  onWsClose () {
+  onWsClose() {
     this.connected = false
     this.websocket = null
     if (this.heartbeatTimerId) {
@@ -120,9 +120,9 @@ class Client {
     window.setTimeout(this.wsConnect.bind(this), 1000)
   }
 
-  onWsMessage (event) {
+  onWsMessage(event) {
     this.refreshReceiveTimeoutTimer()
-    let { cmd, data } = JSON.parse(event.data)
+    let {cmd, data} = JSON.parse(event.data)
     if (cmd !== 'HEARTBEAT') {
       console.log(cmd, data)
     }
@@ -137,12 +137,7 @@ class Client {
         break
       }
       case 'ADD_USER': {
-        let d = JSON.parse(data)
-        store.commit('addUser', {
-          nickname: d.info[2][1],
-          uid: d.info[2][0].toString(),
-          level: d.info[7].toString()
-        })
+        store.commit('addUser', data)
         break
       }
       case 'REMOVE_ALL': {
