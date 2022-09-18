@@ -133,8 +133,7 @@ func (s *Server) HandleJoinQueue(user *message.User) {
 		log.Error("排队失败: 队列满了")
 		return
 	}
-	ok := s.Queue.Add(user)
-	if ok {
+	if ok := s.Queue.Add(user); ok {
 		log.Infof("添加排队成功: %s (uid: %d)", user.Uname, user.Uid)
 		err := s.Eio.BoardCastEvent(eio.Event{
 			EventName: "ADD_USER",
@@ -149,8 +148,7 @@ func (s *Server) HandleJoinQueue(user *message.User) {
 }
 
 func (s *Server) HandleLeaveQueue(user *message.User) {
-	if s.Queue.In(user) {
-		s.Queue.Remove(user.Uid)
+	if ok := s.Queue.Remove(user.Uid); ok {
 		_ = s.Eio.BoardCastEvent(eio.Event{
 			EventName: "REMOVE_USER",
 			Data:      strconv.Itoa(user.Uid),
