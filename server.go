@@ -46,7 +46,7 @@ func (s *Server) Init() {
 
 	s.Eio.RegisterEventHandler("ADD_USER", func(event *eio.Event) {
 		_ = s.Eio.BoardCastEvent(*event)
-		log.Info("测试用户: ", event.Data)
+		log.Debug("测试用户: ", event.Data)
 	})
 
 	s.Eio.RegisterEventHandler("REMOVE_USER", func(event *eio.Event) {
