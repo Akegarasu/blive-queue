@@ -1,12 +1,13 @@
 package main
 
 import (
+	"strconv"
+	"strings"
+
 	"github.com/Akegarasu/blive-queue/eio"
 	bliveClient "github.com/Akegarasu/blivedm-go/client"
 	"github.com/Akegarasu/blivedm-go/message"
 	"github.com/tidwall/gjson"
-	"strconv"
-	"strings"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -93,10 +94,10 @@ func (s *Server) ConnectDanmakuServer(roomID string) {
 	if s.DanmakuClient != nil {
 		s.DanmakuClient.Stop()
 	}
-	c := bliveClient.NewClient(roomID)
+	c := bliveClient.NewClient(roomID, "208259")
 	c.OnDanmaku(s.HandleDanmaku)
 	c.UseDefaultHost()
-	err := c.ConnectAndStart()
+	err := c.Start()
 	if err != nil {
 		log.Warn("连接弹幕服务器出错")
 	}
