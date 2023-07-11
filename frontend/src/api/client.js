@@ -137,7 +137,7 @@ class Client {
         break
       }
       case 'ADD_USER': {
-        store.commit('addUser', data)
+        store.commit('addUser', JSON.parse(data))
         break
       }
       case 'REMOVE_ALL': {

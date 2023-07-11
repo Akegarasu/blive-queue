@@ -3,19 +3,20 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os/exec"
+	"time"
+
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	easy "github.com/t-tomalak/logrus-easy-formatter"
-	"os/exec"
-	"time"
 )
 
 var (
 	dev     bool
 	input   string
 	webPort = 8080
-	version = "v0.3.2"
+	version = "v0.4.1"
 )
 
 func init() {
