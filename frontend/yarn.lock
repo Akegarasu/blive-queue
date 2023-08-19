@@ -3382,13 +3382,6 @@ electron-to-chromium@^1.3.723:
   resolved "https://registry.nlark.com/electron-to-chromium/download/electron-to-chromium-1.3.772.tgz#fd1ed39f9f3149f62f581734e4f026e600369479"
   integrity sha1-/R7Tn58xSfYvWBc05PAm5gA2lHk=
 
-element-ui-el-table-draggable@^1.2.10:
-  version "1.2.10"
-  resolved "https://registry.yarnpkg.com/element-ui-el-table-draggable/-/element-ui-el-table-draggable-1.2.10.tgz#3786e609545b0666d3f91a81d116498f12672ccc"
-  integrity sha512-MBAdC5+q6X0lsAaJT/eFN/3giBg87U5RbAmOI4/myOXenTnQgU5U2kPXchPEAbexj/PV9btAH1vvhWS20LtuEQ==
-  dependencies:
-    sortablejs "^1.9.0"
-
 element-ui@^2.9.1:
   version "2.15.3"
   resolved "https://registry.nlark.com/element-ui/download/element-ui-2.15.3.tgz#55108ab82a3bcc646e7b0570871c48ba96300652"
@@ -7471,7 +7464,7 @@ sort-keys@^1.0.0:
   dependencies:
     is-plain-obj "^1.0.0"
 
-sortablejs@^1.9.0:
+sortablejs@^1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.15.0.tgz#53230b8aa3502bb77a29e2005808ffdb4a5f7e2a"
   integrity sha512-bv9qgVMjUMf89wAvM6AxVvS/4MX3sPeN0+agqShejLU5z5GX4C75ow1O2e5k4L6XItUyAK3gH6AxSbXrOM5e8w==

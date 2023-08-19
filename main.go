@@ -16,7 +16,7 @@ var (
 	dev     bool
 	input   string
 	webPort = 8080
-	version = "v0.4.1"
+	version = "v0.4.2"
 )
 
 func init() {
@@ -40,9 +40,7 @@ func main() {
 		go checkUpdate()
 	}
 	router := gin.New()
-	if dev {
-		router.Use(CorsMiddleWare("http://localhost:8080"))
-	}
+	router.Use(CorsMiddleWare("http://localhost:8080"))
 	router.GET("/eio", s.Eio.Warp)
 	router.GET("/api/sync", func(c *gin.Context) {
 		c.JSON(200, s.Queue.Encode())

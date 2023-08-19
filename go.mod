@@ -3,7 +3,7 @@ module github.com/Akegarasu/blive-queue
 go 1.18
 
 require (
-	github.com/Akegarasu/blivedm-go v1.3.1
+	github.com/Akegarasu/blivedm-go v1.4.0
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.7.7
 	github.com/google/uuid v1.3.0
@@ -31,6 +31,6 @@ require (
 	golang.org/x/crypto v0.0.0-20220427172511-eb4f295cb31f // indirect
 	golang.org/x/sys v0.0.0-20220422013727-9388b58f7150 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
+	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
