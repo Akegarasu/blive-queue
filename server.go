@@ -94,10 +94,13 @@ func (s *Server) ConnectDanmakuServer(roomID string) {
 	if s.DanmakuClient != nil {
 		s.DanmakuClient.Stop()
 	}
-	c := bliveClient.NewClient(roomID, "208259")
+	rid, err := strconv.Atoi(roomID)
+	if err != nil {
+		log.Error("房间 ID 解析错误")
+	}
+	c := bliveClient.NewClient(rid)
 	c.OnDanmaku(s.HandleDanmaku)
-	c.UseDefaultHost()
-	err := c.Start()
+	err = c.Start()
 	if err != nil {
 		log.Warn("连接弹幕服务器出错")
 	}
